@@ -38,6 +38,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
+    @GetMapping
+    public ResponseEntity<UserResponse> getUserByUsername(@RequestHeader("X-User-name") String username) {
+        return ResponseEntity.ok(userService.getUserByUsername(username));
+    }
+
     @DeleteMapping
     public ResponseEntity<String> deleteUser(@RequestHeader("X-User-ID") Long userId) {
         userService.deleteUser(userId);

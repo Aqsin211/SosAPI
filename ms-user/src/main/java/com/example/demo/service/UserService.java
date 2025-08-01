@@ -78,4 +78,9 @@ public class UserService {
         UserEntity userEntity = userRepository.findByUsername(authRequest.getUsername());
         return Objects.equals(userEntity.getPassword(), authRequest.getPassword());
     }
+
+    public UserResponse getUserByUsername(String username) {
+        UserEntity userEntity = userRepository.findByUsername(username);
+        return UserMapper.mapEntityToResponse(userEntity, contactService.getAllContacts(userEntity.getUserId()));
+    }
 }

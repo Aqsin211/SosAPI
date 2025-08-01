@@ -21,6 +21,7 @@ public class JwtService {
     }
 
     public String generateToken(Long userId, String username, String role) {
+
         return Jwts.builder()
                 .setSubject("SilentSignalsJWT")
                 .setIssuedAt(new Date())

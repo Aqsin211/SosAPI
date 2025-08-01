@@ -1,12 +1,13 @@
 package az.company.msauth.client;
 
 import az.company.msauth.client.decoder.CustomErrorDecoder;
-import az.company.msauth.config.FeignAuthInterceptor;
 import az.company.msauth.dao.request.AuthRequest;
+import az.company.msauth.dao.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name = "ms-user",
@@ -16,17 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserClient {
     @GetMapping("/validation")
     Boolean userValid(@RequestBody AuthRequest authRequest);
+
+    @GetMapping
+    ResponseEntity<UserResponse> getUserByUsername(@RequestHeader("X-User-name") String username);
 }
-
-
-//@FeignClient(
-//        name = "ms-product",
-//        url = "http://ms-product:8080/v1/products",
-//        configuration = {FeignAuthInterceptor.class, CustomErrorDecoder.class}
-//)
-//public interface ProductClient {
-//    @PostMapping("/reduce-quantity")
-//    void reduceQuantity(@RequestBody ReduceQuantityRequest reduceQuantityRequest);
-//
-//
-//}

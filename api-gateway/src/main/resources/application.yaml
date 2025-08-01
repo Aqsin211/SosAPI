@@ -17,4 +17,4 @@ spring:
             - Path=/auth
 
 jwt:
-  secret: verySecretKeyChangeThis
+  secret-key: SUPER_SECRET_KEY_SUPER_SECRET_KEY_123456

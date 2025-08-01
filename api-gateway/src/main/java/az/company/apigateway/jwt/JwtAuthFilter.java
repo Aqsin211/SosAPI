@@ -8,6 +8,9 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
 @Component
@@ -15,7 +18,13 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
 
     @Value("${spring.jwt.secret-key}")
     private String secretKey;
-    private final Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
 
     public JwtAuthFilter() {
         super(Config.class);
@@ -25,12 +34,10 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
-
             if (token == null || !token.startsWith("Bearer ")) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
-
             try {
                 Claims claims = Jwts.parserBuilder()
                         .setSigningKey(key)
@@ -38,10 +45,15 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
                         .parseClaimsJws(token.replace("Bearer ", ""))
                         .getBody();
 
-                exchange.getRequest().mutate()
-                        .header("X-User-ID", claims.getSubject())
-                        .header("X-Internal-Gateway", "true")
-                        .build();
+                // Pass userId, username, role, and marker for internal calls
+                exchange = exchange.mutate().request(
+                        exchange.getRequest().mutate()
+                                .header("X-User-ID", claims.get("userId", String.class))
+                                .header("X-Username", claims.getSubject())
+                                .header("X-Role", claims.get("role", String.class))
+                                .header("X-Internal-Gateway", "true")
+                                .build()
+                ).build();
 
                 return chain.filter(exchange);
             } catch (Exception e) {

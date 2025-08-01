@@ -1,3 +1,5 @@
 spring:
   application:
     name: ms-auth
+jwt:
+  secret: SUPER_SECRET_KEY_SUPER_SECRET_KEY_123456
