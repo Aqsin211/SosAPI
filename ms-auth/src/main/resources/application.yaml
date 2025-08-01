@@ -3,3 +3,5 @@ spring:
     name: ms-auth
 jwt:
   secret: SUPER_SECRET_KEY_FOR_JWT_SIGNING
+server:
+  port: 8081

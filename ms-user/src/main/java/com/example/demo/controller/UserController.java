@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(userId));
     }
 
-    @GetMapping
+    @GetMapping("/name")
     public ResponseEntity<UserResponse> getUserByUsername(@RequestHeader("X-User-name") String username) {
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity.ok(CrudMessages.OPERATION_UPDATED.getMessage());
     }
 
-    @GetMapping("/validation")
+    @PostMapping    ("/validation")
     public Boolean userValid(@RequestBody AuthRequest authRequest) {
         return userService.userIsValid(authRequest);
     }

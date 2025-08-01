@@ -1,20 +1,21 @@
-server:
-  port: 8080
 spring:
-  application:
-    name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: ms-user
-          uri: http://localhost:8081
-          predicates:
-            - Path=/user/**
-            - Path=/user
-        - id: ms-auth
-          uri: http://localhost:8082
-          predicates:
-            - Path=/auth
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/auth/**
+              filters:
+                - name: JwtAuth
 
-jwt:
-  secret: SUPER_SECRET_KEY_FOR_JWT_SIGNING
+            - id: user-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/user/**
+              filters:
+                - name: JwtAuth
+  jwt:
+    secret-key: SUPER_SECRET_KEY_FOR_JWT_SIGNING
