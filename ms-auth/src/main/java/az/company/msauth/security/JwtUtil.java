@@ -2,18 +2,22 @@ package az.company.msauth.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "yourSecretKeyyourSecretKeyyourSecretKey";
+    private final Key key;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()

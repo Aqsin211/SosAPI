@@ -27,7 +27,7 @@ public class AuthController {
 
         if (userClient.userValid(authRequest)) {
             UserResponse userResponse = userClient.getUserByUsername(authRequest.getUsername()).getBody();
-            String token = jwtService.generateToken(userResponse.getUserId(), userResponse.getUsername(), userResponse.getRole());
+            String token = jwtService.generateToken(userResponse.getUs  erId(), userResponse.getUsername(), userResponse.getRole());
             return ResponseEntity.ok(new AuthResponse(token));
         } else {
             throw new RuntimeException("Unauthorized");

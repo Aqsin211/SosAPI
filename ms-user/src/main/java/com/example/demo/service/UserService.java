@@ -74,9 +74,9 @@ public class UserService {
     }
 
     public Boolean userIsValid(AuthRequest authRequest) {
-        authRequest.setPassword(new BCryptPasswordEncoder().encode(authRequest.getPassword()));
         UserEntity userEntity = userRepository.findByUsername(authRequest.getUsername());
-        return Objects.equals(userEntity.getPassword(), authRequest.getPassword());
+        if (userEntity == null) return false;
+        return new BCryptPasswordEncoder().matches(authRequest.getPassword(), userEntity.getPassword());
     }
 
     public UserResponse getUserByUsername(String username) {

@@ -17,4 +17,4 @@ spring:
             - Path=/auth
 
 jwt:
-  secret-key: SUPER_SECRET_KEY_SUPER_SECRET_KEY_123456
+  secret: SUPER_SECRET_KEY_FOR_JWT_SIGNING
