@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ms-user
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user-database
+    username: postgres
+    password: Postgres1234567890
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      .hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+server:
+  port: 8082
