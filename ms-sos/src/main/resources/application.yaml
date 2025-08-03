@@ -9,7 +9,7 @@ spring:
     hibernate:
       ddl-auto: update
     properties:
-      .hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
   data:
     redis:
@@ -18,5 +18,27 @@ spring:
       port: 6379
   websocket:
     allowed-origins: "*"
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aqsinsteam@gmail.com
+    password: rgss lcsc nxzv qvgs
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+          ssl.trust: smtp.gmail.com
+  cache:
+    type: redis
+
 server:
   port: 8083
+  servlet:
+    context-path: /api
+
+app:
+  sos:
+    timeout-minutes: 3
+    inactivity-threshold-minutes: 15
+    location-ttl-minutes: 20

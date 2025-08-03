@@ -1,26 +1,33 @@
 package az.company.mssos.controller;
 
 import az.company.mssos.service.SosAcknowledgmentService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import az.company.mssos.service.SosService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sos-response")
+@RequiredArgsConstructor
 public class ContactResponseController {
-    private final SosAcknowledgmentService sosService;
+    private final SosAcknowledgmentService acknowledgmentService;
+    private final SosService sosService;
 
-    public ContactResponseController(SosAcknowledgmentService sosService) {
-        this.sosService = sosService;
+    // For contacts to acknowledge alerts
+    @PostMapping("/acknowledge/{sosId}")
+    public ResponseEntity<String> acknowledgeAlert(
+            @RequestHeader("X-User-ID") Long contactId,
+            @PathVariable Long sosId) {
+        acknowledgmentService.markAlertReceived(sosId, contactId);
+        return ResponseEntity.ok("Alert acknowledged");
     }
 
-    @PostMapping("/acknowledge/{sosId}")
-    public void acknowledgeAlert(
+    // For contacts to resolve SOS
+    @PostMapping("/resolve/{alertId}")
+    public ResponseEntity<String> resolveSos(
             @RequestHeader("X-User-ID") Long contactId,
-            @PathVariable Long sosId
-    ) {
-        sosService.markAlertReceived(sosId, contactId);
+            @PathVariable Long alertId) {
+        sosService.resolveSos(alertId,contactId);
+        return ResponseEntity.ok("SOS resolved by contact");
     }
 }

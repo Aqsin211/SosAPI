@@ -6,9 +6,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Set;
-
-import static java.time.Instant.*;
 
 @Service
 @RequiredArgsConstructor
@@ -16,11 +15,11 @@ public class LocationService {
     private final RedisTemplate<String, LocationEntity> redisTemplate;
 
     public void updateUserLocation(Long userId, LocationEntity location) {
-        location.setTimestamp(now()); // Always update timestamp
+        location.setTimestamp(Instant.now());
         redisTemplate.opsForValue().set(
                 "user:location:" + userId,
                 location,
-                Duration.ofMinutes(20) // TTL > inactivity window
+                Duration.ofMinutes(20)
         );
     }
 

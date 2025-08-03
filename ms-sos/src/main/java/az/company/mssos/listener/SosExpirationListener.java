@@ -1,42 +1,54 @@
 package az.company.mssos.listener;
 
-import az.company.mssos.client.UserClient;
-import az.company.mssos.dao.response.UserResponse;
 import az.company.mssos.entity.SosAlert;
-import az.company.mssos.mapper.UserMapper;
-import az.company.mssos.service.LocationService;
+import az.company.mssos.repository.SosAlertRepository;
 import az.company.mssos.service.NotificationService;
-import org.springframework.stereotype.Component;
-
+import az.company.mssos.service.SosService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class SosExpirationListener implements MessageListener {
     private final NotificationService notificationService;
-    private final LocationService locationService;
-    private final UserClient userClient;
-
-    public SosExpirationListener(NotificationService notificationService, LocationService locationService, UserClient userClient) {
-        this.notificationService = notificationService;
-        this.locationService = locationService;
-        this.userClient = userClient;
-    }
+    private final SosService sosService;
+    private final SosAlertRepository sosAlertRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        String expiredKey = new String(message.getBody());
-        if (expiredKey.startsWith("sos:")) {
+        try {
+            String expiredKey = new String(message.getBody());
+            if (!expiredKey.startsWith("sos:")) return;
+
             Long userId = Long.parseLong(expiredKey.split(":")[1]);
-            UserResponse user = userClient.getUser(userId).getBody();
-            SosAlert sosAlert = new SosAlert();
-            sosAlert.builder()
-                    .location(locationService.getLastKnownLocation(userId))
-                    .user(UserMapper.mapResponseToEntity(Objects.requireNonNull(user)))
-                    .build();
-            notificationService.sendFallbackAlert(sosAlert);
+            String sosIdString = redisTemplate.opsForValue().get(expiredKey);
+
+            if (sosIdString == null) {
+                log.warn("SOS expired but no alert ID found for user: {}", userId);
+                return;
+            }
+
+            SosAlert alert = sosService.getSosAlertById(Long.parseLong(sosIdString));
+            if (alert == null) {
+                log.error("Missing SOS alert record for ID: {}", sosIdString);
+                return;
+            }
+
+            if (!alert.isResolved()) {
+                log.info("Triggering fallback for unresolved SOS (User: {}, Alert: {})", userId, alert.getSosId());
+                notificationService.sendFallbackAlert(alert);
+
+                alert.setResolved(true);
+                sosAlertRepository.save(alert);
+            }
+        } catch (Exception e) {
+            log.error("Failed to process Redis expiration event", e);
         }
     }
 }
