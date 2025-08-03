@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
         configuration = {CustomErrorDecoder.class}
 )
 public interface UserClient {
-    @GetMapping("/name")
+    @GetMapping
     ResponseEntity<UserResponse> getUser(@RequestHeader("X-User-ID") Long userId);
 }

@@ -31,14 +31,12 @@ public class SosAlert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long sosId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
     UserEntity user;
-
     @Embedded
     LocationEntity location;
-
     Instant triggeredAt;
+    Instant resolvedAt;
     boolean resolved;
 }

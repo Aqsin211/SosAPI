@@ -1,10 +1,7 @@
 package az.company.mssos.mapper;
 
-import az.company.mssos.dao.response.ContactResponse;
 import az.company.mssos.dao.response.UserResponse;
 import az.company.mssos.entity.UserEntity;
-
-import java.util.List;
 
 public enum UserMapper {
     USER_MAPPER;
