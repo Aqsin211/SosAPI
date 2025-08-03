@@ -30,6 +30,7 @@ public class NotificationService {
     private void sendEmailAlert(String email, String username, LocationEntity location, Instant triggeredAt) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
+        message.setFrom("aqsinsteam@gmail.com");
         message.setSubject("URGENT: SOS Alert for " + username);
         message.setText(String.format(
                 "User %s triggered an SOS!\n\n" +

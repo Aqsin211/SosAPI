@@ -11,8 +11,27 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 @EnableConfigurationProperties(MailProperties.class)
 public class MailConfig {
+
+    private final MailProperties mailProperties;
+
+    public MailConfig(MailProperties mailProperties) {
+        this.mailProperties = mailProperties;
+    }
+
     @Bean
     public JavaMailSender javaMailSender() {
-        return new JavaMailSenderImpl();
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(mailProperties.getHost());
+        mailSender.setPort(mailProperties.getPort());
+        mailSender.setUsername(mailProperties.getUsername());
+        mailSender.setPassword(mailProperties.getPassword());
+        mailSender.setJavaMailProperties(asProperties(mailProperties.getProperties()));
+        return mailSender;
+    }
+
+    private java.util.Properties asProperties(java.util.Map<String, String> source) {
+        java.util.Properties props = new java.util.Properties();
+        props.putAll(source);
+        return props;
     }
 }

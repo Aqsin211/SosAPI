@@ -132,4 +132,5 @@ public class SosService {
     public SosAlert getSosAlertById(Long sosId) {
         return sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException("Sos alert not found"));
     }
+
 }

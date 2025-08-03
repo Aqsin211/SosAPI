@@ -30,7 +30,7 @@ public class ContactController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String createContact(@RequestBody ContactRequest contactRequest, @RequestHeader("X-User-ID") Long userId) {
+    public String createContact(@RequestBody ContactRequest contactRequest, @RequestHeader("X-User-ID"  ) Long userId) {
         contactService.createContact(contactRequest, userId);
         return CrudMessages.OPERATION_CREATED.getMessage();
     }
