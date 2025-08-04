@@ -41,7 +41,7 @@ public class UserService {
     }
 
     public UserResponse getUserById(Long userId) {
-        return userRepository.findById(userId).map((UserEntity userEntity) -> UserMapper.mapEntityToResponse(userEntity, contactService.getAllContacts(userId))).orElseThrow(
+        return userRepository.findById(userId).map((UserEntity userEntity) -> UserMapper.mapEntityToResponse(userEntity, contactService.getAllContactsByUserId(userId))).orElseThrow(
                 () -> new NotFoundException(ErrorMessages.USER_DOES_NOT_EXIST.getMessage())
         );
     }
@@ -81,6 +81,6 @@ public class UserService {
 
     public UserResponse getUserByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username);
-        return UserMapper.mapEntityToResponse(userEntity, contactService.getAllContacts(userEntity.getUserId()));
+        return UserMapper.mapEntityToResponse(userEntity, contactService.getAllContactsByUserId(userEntity.getUserId()));
     }
 }

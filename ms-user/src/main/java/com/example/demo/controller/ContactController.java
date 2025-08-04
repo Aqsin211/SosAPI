@@ -30,19 +30,19 @@ public class ContactController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String createContact(@RequestBody ContactRequest contactRequest, @RequestHeader("X-User-ID"  ) Long userId) {
+    public String createContact(@RequestBody ContactRequest contactRequest, @RequestHeader("X-User-ID") Long userId) {
         contactService.createContact(contactRequest, userId);
         return CrudMessages.OPERATION_CREATED.getMessage();
     }
 
     @GetMapping("/{contactId}")
-    public ResponseEntity<ContactResponse> getContact(@PathVariable Long contactId, @RequestHeader("X-User-ID") Long userId ) {
-        return ResponseEntity.ok(contactService.getContactById(contactId,userId));
+    public ResponseEntity<ContactResponse> getContact(@PathVariable Long contactId, @RequestHeader("X-User-ID") Long userId) {
+        return ResponseEntity.ok(contactService.getContactById(contactId, userId));
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<ContactResponse>> getAllContacts(@RequestHeader("X-User-ID") Long userId) {
-        return ResponseEntity.ok(contactService.getAllContacts(userId));
+        return ResponseEntity.ok(contactService.getAllContactsByUserId(userId));
     }
 
     @DeleteMapping("/{contactId}")
@@ -52,8 +52,13 @@ public class ContactController {
     }
 
     @PutMapping("/{contactId}")
-    public ResponseEntity<String> updateContact(@PathVariable Long contactId, @RequestBody ContactRequest contactRequest,@RequestHeader("X-User-ID") Long userId) {
-        contactService.updateContact(contactId, contactRequest ,userId);
+    public ResponseEntity<String> updateContact(@PathVariable Long contactId, @RequestBody ContactRequest contactRequest, @RequestHeader("X-User-ID") Long userId) {
+        contactService.updateContact(contactId, contactRequest, userId);
         return ResponseEntity.ok(CrudMessages.OPERATION_UPDATED.getMessage());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ContactResponse>> getAllContacts() {
+        return ResponseEntity.ok(contactService.getAllContacts());
     }
 }

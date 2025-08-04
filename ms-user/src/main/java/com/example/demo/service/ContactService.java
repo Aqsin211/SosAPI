@@ -52,7 +52,7 @@ public class ContactService {
         }
     }
 
-    public List<ContactResponse> getAllContacts(Long userId) {
+    public List<ContactResponse> getAllContactsByUserId(Long userId) {
         return contactRepository.findAll().stream()
                 .filter(contactEntity -> contactEntity.getUserEntity().getUserId().equals(userId))
                 .map(ContactMapper::mapEntityToResponse).toList();
@@ -90,5 +90,9 @@ public class ContactService {
             contactEntity.setPhoneNumber(contactRequest.getPhoneNumber());
         }
         contactRepository.save(contactEntity);
+    }
+
+    public List<ContactResponse> getAllContacts() {
+        return contactRepository.findAll().stream().map(ContactMapper::mapEntityToResponse).toList();
     }
 }

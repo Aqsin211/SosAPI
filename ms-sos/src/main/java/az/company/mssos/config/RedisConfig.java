@@ -2,6 +2,7 @@ package az.company.mssos.config;
 
 import az.company.mssos.entity.LocationEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +14,23 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
+
     @Bean
     public RedisTemplate<String, LocationEntity> locationRedisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, LocationEntity> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(LocationEntity.class));
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Jackson2JsonRedisSerializer<LocationEntity> serializer =
+                new Jackson2JsonRedisSerializer<>(LocationEntity.class);
+        serializer.setObjectMapper(mapper);
+
+        template.setValueSerializer(serializer);
+        template.afterPropertiesSet();
         return template;
     }
 
@@ -36,21 +48,20 @@ public class RedisConfig {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // Configure ObjectMapper
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        // Optional: Write date/time as ISO strings instead of timestamps
-        // objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        // Create serializer with the configured mapper
-        Jackson2JsonRedisSerializer<Object> jacksonSerializer =
-                new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        serializer.setObjectMapper(mapper);
 
+        template.setDefaultSerializer(serializer);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(jacksonSerializer);
+        template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(jacksonSerializer);
+        template.setHashValueSerializer(serializer);
 
+        template.afterPropertiesSet();
         return template;
     }
 }
