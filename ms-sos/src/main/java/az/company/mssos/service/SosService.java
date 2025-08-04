@@ -123,11 +123,20 @@ public class SosService {
         locationService.getAllLocationKeys().forEach(key -> {
             Long userId = Long.parseLong(key.split(":")[2]);
             LocationEntity location = locationService.getLastKnownLocation(userId);
+
             if (location.getTimestamp().isBefore(Instant.now().minus(15, ChronoUnit.MINUTES))) {
-                triggerSos(userId, location);
+                // Check if inactivity SOS was already triggered
+                String inactivityKey = "sos-inactivity:" + userId;
+                Boolean alreadyTriggered = redisTemplate.hasKey(inactivityKey);
+                if (!alreadyTriggered) {
+                    triggerSos(userId, location);
+                    // Set flag with TTL to avoid repeated SOS triggers
+                    redisTemplate.opsForValue().set(inactivityKey, "1", Duration.ofMinutes(30));
+                }
             }
         });
     }
+
 
     public SosAlert getSosAlertById(Long sosId) {
         return sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException("Sos alert not found"));

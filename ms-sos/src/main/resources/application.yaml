@@ -1,10 +1,6 @@
 spring:
   application:
     name: ms-sos
-#  eureka:
-##     client:
-##      service-url:
-##        defaultZone: http://localhost:8761/eureka
   datasource:
     url: jdbc:postgresql://localhost:5432/user-database
     username: postgres
@@ -25,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: aqsinsteam@gmail.com
+    password: rgss lcsc nxzv qvgs
     properties:
       mail:
         smtp:
@@ -38,9 +34,14 @@ spring:
 
 server:
   port: 8083
-
 app:
   sos:
     timeout-minutes: 3
     inactivity-threshold-minutes: 15
     location-ttl-minutes: 20
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true

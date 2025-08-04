@@ -1,11 +1,13 @@
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       server:
         webflux:
           routes:
             - id: auth-service
-              uri: http://localhost:8081
+              uri: http://localhost:8085
               predicates:
                 - Path=/auth/**
               filters:
@@ -17,5 +19,18 @@ spring:
                 - Path=/user/**
               filters:
                 - name: JwtAuth
+
+            - id: sos-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/sos/**,/sos-response/**
+              filters:
+                - name: JwtAuth
   jwt:
     secret-key: SUPER_SECRET_KEY_FOR_JWT_SIGNING
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
