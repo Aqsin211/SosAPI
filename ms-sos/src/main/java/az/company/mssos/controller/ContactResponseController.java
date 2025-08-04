@@ -1,6 +1,7 @@
 package az.company.mssos.controller;
 
 import az.company.mssos.dao.response.SosResponse;
+import az.company.mssos.enums.ResponseMessages;
 import az.company.mssos.service.SosAcknowledgmentService;
 import az.company.mssos.service.SosService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class ContactResponseController {
             @RequestHeader("X-contact-ID") Long contactId,
             @PathVariable Long sosId) {
         acknowledgmentService.markAlertReceived(sosId, contactId);
-        return ResponseEntity.ok("Alert acknowledged");
+        return ResponseEntity.ok(ResponseMessages.ALERT_ACKNOWLEDGED.getMessage());
     }
 
     // For contacts to resolve SOS
@@ -41,6 +42,6 @@ public class ContactResponseController {
             @RequestHeader("X-contact-ID") Long contactId,
             @PathVariable Long alertId) {
         sosService.resolveSos(alertId, contactId);
-        return ResponseEntity.ok("SOS resolved by contact");
+        return ResponseEntity.ok(ResponseMessages.SOS_RESOLVED.getMessage());
     }
 }
