@@ -7,6 +7,7 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.enums.ErrorMessages;
 import com.example.demo.enums.UserRoles;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.exception.UserExistsException;
 import com.example.demo.mapper.ContactMapper;
 import com.example.demo.repository.ContactRepository;
@@ -34,7 +35,7 @@ public class ContactService {
             throw new UserExistsException(ErrorMessages.GMAIL_AT_USE.getMessage());
         }
         if (contactRepository.existsByPhoneNumber(contactRequest.getPhoneNumber())) {
-            throw new UserExistsException("Phone number already at use");
+            throw new UserExistsException(ErrorMessages.PHONE_AT_USE.getMessage());
         }
         contactRequest.setRole(UserRoles.CONTACT.getRole());
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
@@ -44,11 +45,11 @@ public class ContactService {
 
     public ContactResponse getContactById(Long contactId, Long userId) {
         ContactResponse contactResponse = contactRepository.findById(contactId).map(ContactMapper::mapEntityToResponse).orElseThrow(
-                () -> new NotFoundException("Contact does not exists"));
+                () -> new NotFoundException(ErrorMessages.CONTACT_DOES_NOT_EXIST.getMessage()));
         if (Objects.equals(contactResponse.getUserId(), userId)) {
             return contactResponse;
         } else {
-            throw new RuntimeException("Forbidden");
+            throw new UnauthorizedException(ErrorMessages.UNAUTHORIZED_ACCESS.getMessage());
         }
     }
 
@@ -60,11 +61,11 @@ public class ContactService {
 
     public void deleteContact(Long contactId, Long userId) {
         ContactResponse contactResponse = contactRepository.findById(contactId).map(ContactMapper::mapEntityToResponse).orElseThrow(
-                () -> new NotFoundException("Contact does not exists"));
+                () -> new NotFoundException(ErrorMessages.CONTACT_DOES_NOT_EXIST.getMessage()));
         if (Objects.equals(contactResponse.getUserId(), userId)) {
             contactRepository.deleteById(contactId);
         } else {
-            throw new RuntimeException("Forbidden");
+            throw new UnauthorizedException(ErrorMessages.UNAUTHORIZED_ACCESS.getMessage());
         }
     }
 
@@ -85,7 +86,7 @@ public class ContactService {
             contactEntity.setGmail(contactRequest.getGmail());
         }
         if (userRepository.existsByPhoneNumber(contactRequest.getPhoneNumber()) && !Objects.equals(contactEntity.getPhoneNumber(), contactRequest.getPhoneNumber())) {
-            throw new UserExistsException("Phone number already at use");
+            throw new UserExistsException(ErrorMessages.PHONE_AT_USE.getMessage());
         } else {
             contactEntity.setPhoneNumber(contactRequest.getPhoneNumber());
         }

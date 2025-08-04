@@ -33,7 +33,7 @@ public class UserService {
             throw new UserExistsException(ErrorMessages.GMAIL_AT_USE.getMessage());
         }
         if (userRepository.existsByPhoneNumber(userRequest.getPhoneNumber())) {
-            throw new UserExistsException("Phone number already at use");
+            throw new UserExistsException(ErrorMessages.PHONE_AT_USE.getMessage());
         }
         userRequest.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
         userRequest.setRole(UserRoles.USER.getRole());
@@ -60,7 +60,7 @@ public class UserService {
             userEntity.setGmail(userRequest.getGmail());
         }
         if (userRepository.existsByPhoneNumber(userRequest.getPhoneNumber()) && !Objects.equals(userEntity.getPhoneNumber(), userRequest.getPhoneNumber())) {
-            throw new UserExistsException("Phone number already at use");
+            throw new UserExistsException(ErrorMessages.PHONE_AT_USE.getMessage());
         } else {
             userEntity.setPhoneNumber(userRequest.getPhoneNumber());
         }

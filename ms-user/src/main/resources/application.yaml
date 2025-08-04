@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-user
   datasource:
-    url: jdbc:postgresql://localhost:5432/user-database
+    url: jdbc:postgresql://localhost:5432/sos-database
     username: postgres
     password: Postgres1234567890
   jpa:
