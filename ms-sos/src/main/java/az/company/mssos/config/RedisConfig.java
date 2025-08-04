@@ -27,7 +27,7 @@ public class RedisConfig {
 
         Jackson2JsonRedisSerializer<LocationEntity> serializer =
                 new Jackson2JsonRedisSerializer<>(LocationEntity.class);
-        serializer.setObjectMapper(mapper);
+        serializer.setObjectMapper(mapper); //deprecated but safe
 
         template.setValueSerializer(serializer);
         template.afterPropertiesSet();
@@ -53,7 +53,7 @@ public class RedisConfig {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        serializer.setObjectMapper(mapper);
+        serializer.setObjectMapper(mapper); //deprecated but safe
 
         template.setDefaultSerializer(serializer);
         template.setKeySerializer(new StringRedisSerializer());

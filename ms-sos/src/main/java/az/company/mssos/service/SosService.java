@@ -8,7 +8,10 @@ import az.company.mssos.dao.response.UserResponse;
 import az.company.mssos.entity.LocationEntity;
 import az.company.mssos.entity.SosAlert;
 import az.company.mssos.entity.UserEntity;
+import az.company.mssos.enums.ErrorMessages;
+import az.company.mssos.exception.ActionException;
 import az.company.mssos.exception.NotFoundException;
+import az.company.mssos.exception.UnauthorizedException;
 import az.company.mssos.mapper.SosMapper;
 import az.company.mssos.mapper.UserMapper;
 import az.company.mssos.repository.SosAlertRepository;
@@ -103,7 +106,7 @@ public class SosService {
                     .anyMatch(contact -> contact.getContactId().equals(contactId));
 
             if (!isAuthorizedContact) {
-                throw new SecurityException("Contact not authorized to resolve this alert");
+                throw new UnauthorizedException(ErrorMessages.CONTACT_UNAUTHORIZED.getMessage());
             }
 
             alert.setResolved(true);
@@ -145,19 +148,19 @@ public class SosService {
 
 
     public SosAlert getSosAlertById(Long sosId) {
-        return sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException("Sos alert not found"));
+        return sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException(ErrorMessages.SOS_ALERT_NOT_FOUND.getMessage()));
     }
 
     public List<SosResponse> getSosAlerts(Long contactId) {
         List<ContactResponse> contactResponses = userClient.getAllContacts().getBody();
         if (contactResponses == null) {
-            throw new RuntimeException("Failed to fetch contacts");
+            throw new ActionException(ErrorMessages.FAILED_TO_FETCH_CONTACTS.getMessage());
         }
 
         ContactResponse contactResponse = contactResponses.stream()
                 .filter(contact -> contact.getContactId().equals(contactId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Contact not found with ID: " + contactId));
+                .orElseThrow(() -> new NotFoundException(String.format(ErrorMessages.CONTACT_NOT_FOUND.getMessage(), contactId)));
 
         return sosAlertRepository.findByUserUserId(contactResponse.getUserId()).stream()
                 .map(SosMapper::mapEntityToResponse)
@@ -171,51 +174,51 @@ public class SosService {
     }
 
     public SosResponse getSosAlert(Long userId, Long sosId) {
-        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new RuntimeException("Sos not found with ID: " + sosId));
+        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException(ErrorMessages.SOS_ALERT_NOT_FOUND.getMessage()));
         if (sosAlert.getUser().getUserId().equals(userId)) {
             return SosMapper.mapEntityToResponse(sosAlert);
         } else {
-            throw new RuntimeException("UNAUTHORIZED");
+            throw new UnauthorizedException(ErrorMessages.UNAUTHORIZED_FOR_THIS_ACTION.getMessage());
         }
     }
 
     public void deleteSosAlert(Long userId, Long sosId) {
-        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new RuntimeException("Sos not found with ID: " + sosId));
+        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException(ErrorMessages.SOS_ALERT_NOT_FOUND.getMessage()));
         if (sosAlert.getUser().getUserId().equals(userId)) {
             sosAlertRepository.delete(sosAlert);
         } else {
-            throw new RuntimeException("UNAUTHORIZED");
+            throw new UnauthorizedException(ErrorMessages.UNAUTHORIZED_FOR_THIS_ACTION.getMessage());
         }
     }
 
     public void updateSosAlert(Long userId, Long sosId, SosRequest sosRequest) {
-        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new RuntimeException("Sos not found with ID: " + sosId));
+        SosAlert sosAlert = sosAlertRepository.findById(sosId).orElseThrow(() -> new NotFoundException(ErrorMessages.SOS_ALERT_NOT_FOUND.getMessage()));
         if (sosAlert.getUser().getUserId().equals(userId)) {
             sosAlert.setLocation(sosRequest.getLocation());
             sosAlert.setResolved(sosRequest.isResolved());
             sosAlert.setResolvedAt(sosRequest.getResolvedAt());
             sosAlertRepository.save(sosAlert);
         } else {
-            throw new RuntimeException("UNAUTHORIZED");
+            throw new UnauthorizedException(ErrorMessages.UNAUTHORIZED_FOR_THIS_ACTION.getMessage());
         }
     }
 
     public SosResponse getSosAlertForContact(Long contactId, Long sosId) {
         List<ContactResponse> contactResponses = userClient.getAllContacts().getBody();
         if (contactResponses == null) {
-            throw new RuntimeException("Failed to fetch contacts");
+            throw new ActionException(ErrorMessages.FAILED_TO_FETCH_CONTACTS.getMessage());
         }
 
         ContactResponse contactResponse = contactResponses.stream()
                 .filter(contact -> contact.getContactId().equals(contactId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Contact not found with ID: " + contactId));
+                .orElseThrow(() -> new NotFoundException(String.format(ErrorMessages.CONTACT_NOT_FOUND.getMessage(), contactId)));
 
         return sosAlertRepository.findByUserUserId(contactResponse.getUserId()).stream()
                 .map(SosMapper::mapEntityToResponse)
                 .filter(sos -> sos.getSosId().equals(sosId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("SOS alert not found with ID: " + sosId + " for this contact"));
+                .orElseThrow(() -> new NotFoundException(String.format(ErrorMessages.SOS_ALERT_NOT_FOUND.getMessage(), sosId)));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.dao.request;
 
+import com.example.demo.exception.ValidationMessages;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthRequest {
-    @NotBlank
+    @NotBlank(message = ValidationMessages.USERNAME_CANNOT_BE_BLANK)
     private String username;
-    @NotBlank
+    @NotBlank(message = ValidationMessages.PASSWORD_CANNOT_BE_BLANK)
     private String password;
 }
 

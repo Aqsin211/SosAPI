@@ -1,6 +1,8 @@
-package com.example.demo.exception;
+package az.company.mssos.exception;
 
+import az.company.mssos.enums.ErrorMessages;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.demo.enums.ErrorMessages.SERVER_ERROR;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -33,6 +35,14 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler(CustomFeignException.class)
+    public ResponseEntity<ErrorResponse> handle(CustomFeignException exception) {
+        return ResponseEntity.status(exception.getStatusCode())
+                .body(ErrorResponse.builder()
+                        .message(exception.getMessage())
+                        .build());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse handle(MethodArgumentNotValidException exception) {
@@ -52,7 +62,7 @@ public class ErrorHandler {
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handle(Exception exception) {
         return ErrorResponse.builder()
-                .message(SERVER_ERROR.getMessage())
+                .message(ErrorMessages.SERVER_ERROR.getMessage())
                 .build();
     }
 }

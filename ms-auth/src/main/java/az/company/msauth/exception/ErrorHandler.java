@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package az.company.msauth.exception;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,22 +9,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.demo.enums.ErrorMessages.SERVER_ERROR;
+import static az.company.msauth.enums.ErrorMessages.SERVER_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(NOT_FOUND)
-    public ErrorResponse handle(NotFoundException exception) {
-        return ErrorResponse.builder()
-                .message(exception.getMessage())
-                .build();
-    }
-
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(UNAUTHORIZED)
     public ErrorResponse handle(UnauthorizedException exception) {
@@ -46,7 +37,6 @@ public class ErrorHandler {
                 .messages(errors)
                 .build();
     }
-
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)

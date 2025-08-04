@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-sos
   datasource:
-    url: jdbc:postgresql://localhost:5432/user-database
+    url: jdbc:postgresql://localhost:5432/sos-database
     username: postgres
     password: Postgres1234567890
   jpa:
@@ -45,3 +45,5 @@ eureka:
       defaultZone: http://localhost:8761/eureka
     register-with-eureka: true
     fetch-registry: true
+alert:
+  sender-email: ${EMAIL_USERNAME}

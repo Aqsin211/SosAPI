@@ -5,6 +5,7 @@ import az.company.mssos.dao.response.UserResponse;
 import az.company.mssos.entity.LocationEntity;
 import az.company.mssos.entity.SosAlert;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import java.util.Objects;
 public class NotificationService {
     private final JavaMailSender mailSender;
     private final UserClient userClient;
+    @Value("${alert.sender-email}")
+    private String senderEmail;
+
 
     public void sendFallbackAlert(SosAlert alert) {
         UserResponse user = Objects.requireNonNull(userClient.getUser(alert.getUser().getUserId()).getBody());
@@ -30,7 +34,7 @@ public class NotificationService {
     private void sendEmailAlert(String email, String username, LocationEntity location, Instant triggeredAt) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setFrom("aqsinsteam@gmail.com");
+        message.setFrom(senderEmail);
         message.setSubject("URGENT: SOS Alert for " + username);
         message.setText(String.format(
                 "User %s triggered an SOS!\n\n" +
