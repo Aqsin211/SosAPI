@@ -2,9 +2,9 @@ package az.company.mssos.controller;
 
 import az.company.mssos.dao.request.SosRequest;
 import az.company.mssos.dao.response.SosResponse;
-import az.company.mssos.entity.LocationEntity;
-import az.company.mssos.enums.CrudMessages;
-import az.company.mssos.enums.ResponseMessages;
+import az.company.mssos.dao.entity.LocationEntity;
+import az.company.mssos.model.enums.CrudMessages;
+import az.company.mssos.model.enums.ResponseMessages;
 import az.company.mssos.service.SosService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

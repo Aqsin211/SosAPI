@@ -1,7 +1,7 @@
 package az.company.mssos.listener;
 
-import az.company.mssos.entity.SosAlert;
-import az.company.mssos.repository.SosAlertRepository;
+import az.company.mssos.dao.entity.SosAlert;
+import az.company.mssos.dao.repository.SosAlertRepository;
 import az.company.mssos.service.NotificationService;
 import az.company.mssos.service.SosService;
 import lombok.RequiredArgsConstructor;

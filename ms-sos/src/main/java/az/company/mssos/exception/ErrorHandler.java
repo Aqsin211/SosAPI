@@ -1,6 +1,6 @@
 package az.company.mssos.exception;
 
-import az.company.mssos.enums.ErrorMessages;
+import az.company.mssos.model.enums.ErrorMessages;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

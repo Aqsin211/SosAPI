@@ -2,8 +2,8 @@ package az.company.mssos.service;
 
 import az.company.mssos.client.UserClient;
 import az.company.mssos.dao.response.UserResponse;
-import az.company.mssos.entity.LocationEntity;
-import az.company.mssos.entity.SosAlert;
+import az.company.mssos.dao.entity.LocationEntity;
+import az.company.mssos.dao.entity.SosAlert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

@@ -1,7 +1,7 @@
 package az.company.mssos.mapper;
 
 import az.company.mssos.dao.response.UserResponse;
-import az.company.mssos.entity.UserEntity;
+import az.company.mssos.dao.entity.UserEntity;
 
 public enum UserMapper {
     USER_MAPPER;

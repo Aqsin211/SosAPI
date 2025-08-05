@@ -1,0 +1,17 @@
+package az.company.msuser.dao.repository;
+
+import az.company.msuser.dao.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    boolean existsByGmail(String gmail);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    UserEntity findByUsername(String username);
+
+}

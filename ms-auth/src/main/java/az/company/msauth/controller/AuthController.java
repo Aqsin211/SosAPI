@@ -4,7 +4,7 @@ import az.company.msauth.client.UserClient;
 import az.company.msauth.dao.request.AuthRequest;
 import az.company.msauth.dao.response.AuthResponse;
 import az.company.msauth.dao.response.UserResponse;
-import az.company.msauth.enums.ErrorMessages;
+import az.company.msauth.model.enums.ErrorMessages;
 import az.company.msauth.exception.UnauthorizedException;
 import az.company.msauth.service.JwtService;
 import org.springframework.http.ResponseEntity;

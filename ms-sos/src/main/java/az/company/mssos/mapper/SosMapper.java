@@ -1,7 +1,7 @@
 package az.company.mssos.mapper;
 
 import az.company.mssos.dao.response.SosResponse;
-import az.company.mssos.entity.SosAlert;
+import az.company.mssos.dao.entity.SosAlert;
 
 public enum SosMapper {
     SOS_MAPPER;

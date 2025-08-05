@@ -1,6 +1,6 @@
 package az.company.mssos.config;
 
-import az.company.mssos.entity.LocationEntity;
+import az.company.mssos.dao.entity.LocationEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

@@ -8,6 +8,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 jwt:
-  secret: SUPER_SECRET_KEY_FOR_JWT_SIGNING
+  secret-key: SUPER_SECRET_KEY_FOR_JWT_SIGNING
 server:
   port: 8085
