@@ -1,11 +1,10 @@
 package az.company.mssos.service;
 
 import az.company.mssos.client.UserClient;
-import az.company.mssos.dao.response.UserResponse;
+import az.company.mssos.model.response.UserResponse;
+import io.github.cdimascio.dotenv.Dotenv;
 import az.company.mssos.dao.entity.LocationEntity;
 import az.company.mssos.dao.entity.SosAlert;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -14,12 +13,17 @@ import java.time.Instant;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 public class NotificationService {
     private final JavaMailSender mailSender;
     private final UserClient userClient;
-    @Value("${alert.sender-email}")
-    private String senderEmail;
+    private final String senderEmail;
+
+    public NotificationService(JavaMailSender mailSender, UserClient userClient) {
+        this.mailSender = mailSender;
+        this.userClient = userClient;
+        Dotenv dotenv = Dotenv.load();
+        this.senderEmail = dotenv.get("EMAIL_USERNAME");
+    }
 
 
     public void sendFallbackAlert(SosAlert alert) {

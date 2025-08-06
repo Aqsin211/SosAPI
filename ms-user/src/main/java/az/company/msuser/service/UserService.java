@@ -8,7 +8,7 @@ import az.company.msuser.model.enums.ErrorMessages;
 import az.company.msuser.model.enums.UserRoles;
 import az.company.msuser.exception.NotFoundException;
 import az.company.msuser.exception.UserExistsException;
-import az.company.msuser.mapper.UserMapper;
+import az.company.msuser.model.mapper.UserMapper;
 import az.company.msuser.dao.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

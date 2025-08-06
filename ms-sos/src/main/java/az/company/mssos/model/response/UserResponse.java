@@ -1,4 +1,4 @@
-package az.company.mssos.dao.response;
+package az.company.mssos.model.response;
 
 import lombok.AccessLevel;
 import lombok.Builder;

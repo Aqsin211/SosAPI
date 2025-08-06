@@ -1,7 +1,7 @@
 package az.company.mssos.client;
 
-import az.company.mssos.dao.response.ContactResponse;
-import az.company.mssos.dao.response.UserResponse;
+import az.company.mssos.model.response.ContactResponse;
+import az.company.mssos.model.response.UserResponse;
 import az.company.mssos.client.decoder.CustomErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package az.company.msuser.mapper;
+package az.company.msuser.model.mapper;
 
 import az.company.msuser.model.request.ContactRequest;
 import az.company.msuser.model.response.ContactResponse;

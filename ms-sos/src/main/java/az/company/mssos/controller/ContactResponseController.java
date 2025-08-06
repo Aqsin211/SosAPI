@@ -1,6 +1,6 @@
 package az.company.mssos.controller;
 
-import az.company.mssos.dao.response.SosResponse;
+import az.company.mssos.model.response.SosResponse;
 import az.company.mssos.model.enums.ResponseMessages;
 import az.company.mssos.service.SosAcknowledgmentService;
 import az.company.mssos.service.SosService;

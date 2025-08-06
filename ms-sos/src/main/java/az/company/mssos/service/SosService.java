@@ -1,10 +1,10 @@
 package az.company.mssos.service;
 
 import az.company.mssos.client.UserClient;
-import az.company.mssos.dao.request.SosRequest;
-import az.company.mssos.dao.response.ContactResponse;
-import az.company.mssos.dao.response.SosResponse;
-import az.company.mssos.dao.response.UserResponse;
+import az.company.mssos.model.request.SosRequest;
+import az.company.mssos.model.response.ContactResponse;
+import az.company.mssos.model.response.SosResponse;
+import az.company.mssos.model.response.UserResponse;
 import az.company.mssos.dao.entity.LocationEntity;
 import az.company.mssos.dao.entity.SosAlert;
 import az.company.mssos.dao.entity.UserEntity;
@@ -12,8 +12,8 @@ import az.company.mssos.model.enums.ErrorMessages;
 import az.company.mssos.exception.ActionException;
 import az.company.mssos.exception.NotFoundException;
 import az.company.mssos.exception.UnauthorizedException;
-import az.company.mssos.mapper.SosMapper;
-import az.company.mssos.mapper.UserMapper;
+import az.company.mssos.model.mapper.SosMapper;
+import az.company.mssos.model.mapper.UserMapper;
 import az.company.mssos.dao.repository.SosAlertRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.redis.core.RedisTemplate;

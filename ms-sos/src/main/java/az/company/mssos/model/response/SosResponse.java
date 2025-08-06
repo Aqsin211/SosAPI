@@ -1,4 +1,4 @@
-package az.company.mssos.dao.response;
+package az.company.mssos.model.response;
 
 import az.company.mssos.dao.entity.LocationEntity;
 import lombok.AccessLevel;

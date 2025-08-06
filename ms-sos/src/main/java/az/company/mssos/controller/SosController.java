@@ -1,7 +1,7 @@
 package az.company.mssos.controller;
 
-import az.company.mssos.dao.request.SosRequest;
-import az.company.mssos.dao.response.SosResponse;
+import az.company.mssos.model.request.SosRequest;
+import az.company.mssos.model.response.SosResponse;
 import az.company.mssos.dao.entity.LocationEntity;
 import az.company.mssos.model.enums.CrudMessages;
 import az.company.mssos.model.enums.ResponseMessages;

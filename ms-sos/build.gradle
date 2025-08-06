@@ -31,7 +31,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDataTypeDependencyVersion"
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'io.github.cdimascio:dotenv-java'
+    implementation 'io.github.cdimascio:dotenv-java:3.2.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.projectlombok:lombok'

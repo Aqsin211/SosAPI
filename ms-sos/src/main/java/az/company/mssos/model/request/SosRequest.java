@@ -1,4 +1,4 @@
-package az.company.mssos.dao.request;
+package az.company.mssos.model.request;
 
 import az.company.mssos.dao.entity.LocationEntity;
 import az.company.mssos.exception.ValidationMessages;

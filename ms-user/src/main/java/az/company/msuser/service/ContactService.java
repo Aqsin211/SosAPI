@@ -9,7 +9,7 @@ import az.company.msuser.model.enums.UserRoles;
 import az.company.msuser.exception.NotFoundException;
 import az.company.msuser.exception.UnauthorizedException;
 import az.company.msuser.exception.UserExistsException;
-import az.company.msuser.mapper.ContactMapper;
+import az.company.msuser.model.mapper.ContactMapper;
 import az.company.msuser.dao.repository.ContactRepository;
 import az.company.msuser.dao.repository.UserRepository;
 import org.springframework.stereotype.Service;
